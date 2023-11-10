@@ -9,20 +9,64 @@ import (
 	"flag"
 )
 
+// problem represents a question and answer pair
+type problem struct {
+	q string
+	a string
+}
+
+// setFlags allows the user to enter a custom name of a problem file
+func setFlags(filename string) *string {
+	// the help flag is included for free
+	flag.StringVar(&filename, "csv", "problems.csv", "a csv file in the format of 'question,answer'")
+	flag.Parse()
+	return &filename
+}
+
+// parseRecords takes in a 2d slice of records and returns a slice of structs
+func parseRecords(records [][]string) []problem {
+	// make new slice of type slice with length of records
+	ret := make([]problem, len(records))
+	// range iterates over a slice or a map
+	for i, record := range records {
+		ret[i] = problem {
+			q: record[0],
+			a: record[1],
+		}
+	}
+	return ret
+}
+
+// quiz takes in a slice of type problem and returns the number of correct answers
+func quiz(problems []problem) int {
+	correct := 0
+	
+	for i, problem := range problems {
+		// prompt the user
+		fmt.Printf("Problem %d: %s = ", i+1, problem.q)
+		var input string
+		// wait for a response
+		fmt.Scanln(&input)
+		// clean input
+		// keep track of correct/incorrect answers
+		if strings.TrimSpace(strings.ToLower(input)) == problem.a {
+			correct++
+		}
+	}
+	return correct
+}
+
 func main() {
 	// set optional flags
 	var filename string
-	
-	flag.StringVar(&filename, "csv", "problems.csv", "a csv file in the format of 'question,answer'")
-	flag.Parse()
+	file := setFlags(filename)
 	
 	// open the file
-	f, err := os.Open(filename)
+	f, err := os.Open(*file)
 	if err != nil {
 		log.Fatalf("unable to open file: %v", err)
 		os.Exit(1)
 	}
-	defer f.Close()
 
 	// read the file
 	r := csv.NewReader(f)
@@ -32,30 +76,13 @@ func main() {
 		log.Fatalf("unable to read file: %v", err)
 		os.Exit(1)
 	}
-	
-	// loop through the file
-	var input string
-	var correct int
-	total := len(records)
-	
-	for i := 0; i < total; i++ {
-		questionSet := records[i]
-		// loop through the questions
-		for j := 0; j < 1; j++ {
-			q := questionSet[j]
-			// prompt the user
-		 	fmt.Printf("Problem %d: " + q + " = ", i+1)
-			// wait for a response
-			fmt.Scanln(&input)
-			// clean input
-			// keep track of correct/incorrect answers
-			if strings.TrimSpace(strings.ToLower(input)) == questionSet[1] {
-				correct++
-			}
-		}
-	}
-	// close file
-	f.Close()
+
+	// problems is now a slice of structs
+	problems := parseRecords(records)
+
+	score := quiz(problems)
+
 	// print score
-	fmt.Printf("You scored %d out of %d\n", correct, total)
+	fmt.Printf("You scored %d out of %d\n", score, len(problems))
+
 }
