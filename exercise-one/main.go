@@ -12,25 +12,25 @@ import (
 func main() {
 	// set optional flags
 	var filename string
-	var help bool
 	
 	flag.StringVar(&filename, "csv", "problems.csv", "a csv file in the format of 'question,answer'")
-	flag.BoolVar(&help, "help", false, "usage")
 	flag.Parse()
 	
 	// open the file
-	f, err := os.Open("problems.csv")
+	f, err := os.Open(filename)
 	if err != nil {
 		log.Fatalf("unable to open file: %v", err)
+		os.Exit(1)
 	}
 	defer f.Close()
 
 	// read the file
 	r := csv.NewReader(f)
-	// returns [][]string, which is a slice
+	// returns [][]string, which is a 2d slice
 	records, err := r.ReadAll()
 	if err != nil {
 		log.Fatalf("unable to read file: %v", err)
+		os.Exit(1)
 	}
 	
 	// loop through the file
@@ -44,12 +44,12 @@ func main() {
 		for j := 0; j < 1; j++ {
 			q := questionSet[j]
 			// prompt the user
-		 	fmt.Printf("Problem 1: " + q + " = ")
+		 	fmt.Printf("Problem %d: " + q + " = ", i+1)
 			// wait for a response
 			fmt.Scanln(&input)
 			// clean input
 			// keep track of correct/incorrect answers
-			if strings.TrimSuffix(strings.ToLower(input), " ") == questionSet[1] {
+			if strings.TrimSpace(strings.ToLower(input)) == questionSet[1] {
 				correct++
 			}
 		}
