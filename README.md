@@ -13,6 +13,7 @@ I'm utilizing [gophercises](https://github.com/gophercises) to assist me in lear
     - [x] flag
     - [x] strings
     - [x] csv
+    - [x] math
     - [ ] testing
 1. GitHub
     - [x] code owners
