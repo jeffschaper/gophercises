@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"flag"
+	"math/rand"
 )
 
 // problem represents a question and answer pair
@@ -16,11 +17,19 @@ type problem struct {
 }
 
 // setFlags allows the user to enter a custom name of a problem file
-func setFlags(filename string) *string {
+func setFlags(filename string, shuffle bool) (*string, *bool) {
 	// the help flag is included for free
 	flag.StringVar(&filename, "csv", "problems.csv", "a csv file in the format of 'question,answer'")
+	flag.BoolVar(&shuffle, "shuffle", false, "shuffle the quiz order")
 	flag.Parse()
-	return &filename
+	return &filename, &shuffle
+}
+
+// shuffleQuiz allows the user to shuffle the order of the questions
+func shuffleQuiz(problems []problem) {
+	rand.Shuffle(len(problems), func(i, j int) {
+		problems[i], problems[j] = problems[j], problems[i]
+	})
 }
 
 // parseRecords takes in a 2d slice of records and returns a slice of structs
@@ -59,8 +68,9 @@ func quiz(problems []problem) int {
 func main() {
 	// set optional flags
 	var filename string
-	file := setFlags(filename)
-	
+	var shuffle bool
+	file, tf := setFlags(filename, shuffle)
+
 	// open the file
 	f, err := os.Open(*file)
 	if err != nil {
@@ -79,6 +89,10 @@ func main() {
 
 	// problems is now a slice of structs
 	problems := parseRecords(records)
+	
+	if *tf != false && len(problems) > 0 {
+		shuffleQuiz(problems)
+	}
 
 	score := quiz(problems)
 
