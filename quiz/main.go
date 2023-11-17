@@ -16,7 +16,7 @@ type problem struct {
 	a string
 }
 
-// setFlags allows the user to enter a custom name of a problem file
+// setFlags allows the user to enter a customize the quiz
 func setFlags(filename string, shuffle bool) (*string, *bool) {
 	// the help flag is included for free
 	flag.StringVar(&filename, "csv", "problems.csv", "a csv file in the format of 'question,answer'")
