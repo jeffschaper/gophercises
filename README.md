@@ -14,6 +14,7 @@ I'm utilizing [gophercises](https://github.com/gophercises) to assist me in lear
     - [x] strings
     - [x] csv
     - [x] math
+    - [x] net/http
     - [ ] testing
 1. Other Go packages
     - [x] gopkg.in/yaml.v2
