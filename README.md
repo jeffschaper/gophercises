@@ -15,6 +15,8 @@ I'm utilizing [gophercises](https://github.com/gophercises) to assist me in lear
     - [x] csv
     - [x] math
     - [ ] testing
+1. Other Go packages
+    - [x] gopkg.in/yaml.v2
 1. GitHub
     - [x] code owners
     - [x] branch protection
@@ -25,3 +27,4 @@ I'm utilizing [gophercises](https://github.com/gophercises) to assist me in lear
 | Exercise | Instructions |
 | :--- | :---  |
 | 1 | https://github.com/gophercises/quiz |
+| 2 | https://github.com/gophercises/urlshort |
