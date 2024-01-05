@@ -40,7 +40,7 @@ func parseRecords(records [][]string) []problem {
 	for i, record := range records {
 		ret[i] = problem {
 			q: record[0],
-			a: record[1],
+			a: strings.TrimSpace(record[1]),
 		}
 	}
 	return ret
@@ -49,7 +49,7 @@ func parseRecords(records [][]string) []problem {
 // quiz takes in a slice of type problem and returns the number of correct answers
 func quiz(problems []problem) int {
 	correct := 0
-	
+
 	for i, problem := range problems {
 		// prompt the user
 		fmt.Printf("Problem %d: %s = ", i+1, problem.q)
@@ -58,7 +58,7 @@ func quiz(problems []problem) int {
 		fmt.Scanln(&input)
 		// clean input
 		// keep track of correct/incorrect answers
-		if strings.TrimSpace(strings.ToLower(input)) == problem.a {
+		if strings.ToLower(input) == problem.a {
 			correct++
 		}
 	}
@@ -89,7 +89,7 @@ func main() {
 
 	// problems is now a slice of structs
 	problems := parseRecords(records)
-	
+
 	if *tf != false && len(problems) > 0 {
 		shuffleQuiz(problems)
 	}
